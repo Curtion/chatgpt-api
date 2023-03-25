@@ -1,3 +1,4 @@
 export default {
-  "apiKey": "",
+  apiKey: "sk-xxxxxxxx",
+  tokenSecret: "147258369",
 }
