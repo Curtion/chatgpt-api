@@ -51,7 +51,7 @@ app.post('/send', jwtMiddleware, async (req, res) => {
   }
 });
 
-app.post('/del', jwtMiddleware, async (req, res) => {
+app.delete('/del', jwtMiddleware, async (req, res) => {
   try {
     const { id } = req.auth;
     Reflect.deleteProperty(session, id);
