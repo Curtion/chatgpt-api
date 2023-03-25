@@ -51,6 +51,22 @@ app.post('/send', jwtMiddleware, async (req, res) => {
   }
 });
 
+app.post('/del', jwtMiddleware, async (req, res) => {
+  try {
+    const { id } = req.auth;
+    Reflect.deleteProperty(session, id);
+    res.json({
+      message: '清空会话成功!',
+      code: 200
+    });
+  } catch (error) {
+    res.json({
+      message: error?.toString(),
+      code: 500
+    });
+  }
+});
+
 app.post('/login', (req, res) => {
   const ip = getClientIp(req);
   const namespaceUuid = uuid.v5(ip, uuid.v5.URL);
