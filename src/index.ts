@@ -9,7 +9,8 @@ import { getClientIp } from './utils.js';
 import session from './session.js';
 
 const api = new ChatGPTAPI({
-  apiKey: config.apiKey
+  apiKey: config.apiKey,
+  apiBaseUrl: 'https://open.aiproxy.xyz/v1',
 })
 
 const jwtMiddleware = expressjwt({
