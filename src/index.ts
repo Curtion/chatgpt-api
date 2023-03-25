@@ -41,12 +41,12 @@ app.post('/send', jwtMiddleware, async (req, res) => {
     }
     res.json({
       message: msg.text,
-      data: 200
+      code: 200
     });
   } catch (error) {
     res.json({
       message: error?.toString(),
-      data: 500
+      code: 500
     });
   }
 });
@@ -61,7 +61,7 @@ app.post('/login', (req, res) => {
   }
   res.json({
     ...user,
-    data: 200,
+    code: 200,
   });
 });
 
