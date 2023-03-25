@@ -4,6 +4,7 @@ import { ChatGPTAPI } from 'chatgpt'
 import jwt from 'jsonwebtoken';
 import * as uuid from 'uuid';
 import bodyParser from 'body-parser';
+import cors from 'cors';
 import config from '../config.js';
 import { getClientIp } from './utils.js';
 import session from './session.js';
@@ -19,6 +20,7 @@ const jwtMiddleware = expressjwt({
 });
 
 const app = express();
+app.use(cors());
 app.use(bodyParser.json());
 
 app.post('/send', jwtMiddleware, async (req, res) => {
