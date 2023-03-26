@@ -37,25 +37,28 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.post('/send', jwtMiddleware, async (req, res) => {
+  res.setHeader('Content-type', 'application/octet-stream')
   try {
     const { id } = req.auth;
     let msg
     if (!session[id]) {
-      msg = await api.sendMessage(req.body.msg)
+      msg = await api.sendMessage(req.body.msg, {
+        onProgress: (partialResponse) => {
+          res.write(partialResponse.delta ?? '')
+        }
+      })
       session[id] = {
         id: msg.id,
         replyDate: Date.now()
       }
     } else {
       msg = await api.sendMessage(req.body.msg, {
-        parentMessageId: session[id].id
+        parentMessageId: session[id].id,
+        onProgress: (partialResponse) => res.write(partialResponse.delta ?? '')
       });
       session[id].replyDate = Date.now()
     }
-    res.json({
-      message: msg.text,
-      code: 200
-    });
+    res.end()
   } catch (error) {
     res.json({
       message: error?.toString(),
