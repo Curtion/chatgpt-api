@@ -4,14 +4,27 @@ import { ChatGPTAPI } from 'chatgpt'
 import jwt from 'jsonwebtoken';
 import * as uuid from 'uuid';
 import bodyParser from 'body-parser';
+import { SocksProxyAgent } from 'socks-proxy-agent';
+import nodeFetch from 'node-fetch'
 import cors from 'cors';
 import config from '../config.js';
 import { getClientIp } from './utils.js';
 import session from './session.js';
 
+const agent = new SocksProxyAgent(config.socks5);
+
 const api = new ChatGPTAPI({
   apiKey: config.apiKey,
-  apiBaseUrl: 'https://open.aiproxy.xyz/v1',
+  fetch: ((url: any, options: any = {}) => {
+    const defaultOptions = {
+      agent
+    };
+    const mergedOptions = {
+      ...defaultOptions,
+      ...options
+    };
+    return nodeFetch(url, mergedOptions);
+  }) as any
 })
 
 const jwtMiddleware = expressjwt({
